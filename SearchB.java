@@ -70,38 +70,33 @@ public class SearchB {
 		/** Setting the key to a value outside of the array*/
 		int key = 5000;
 		
-		/** Recording the worst possible linear and binary times*/
+		/** Recording the worst possible linear time*/
 		long startTime = System.nanoTime();
 		int linResult = linSearch(array, size, key);
 		long endTime = System.nanoTime();
 		long linElapsedTime = endTime - startTime;
-		System.out.println("Worst possible linear time: " + (linElapsedTime/100) + " ns.");
+		System.out.println("Worst possible linear time: " + (linElapsedTime) + " microsec.");
 		
+		/** Recording the worst possible binary time*/
 		startTime = System.nanoTime();
 		int biResult = biSearch(array, size, key);
 		endTime = System.nanoTime();
 		long elapsedTime = endTime - startTime;
-		System.out.println("Worst possible binary time: " + (elapsedTime/100) + " ns.");
+		System.out.println("Worst possible binary time: " + (elapsedTime) + " microsec.");
 		
 		/** Calculates time for a single binary step*/
-		double step = 2;
-		double inc = 1;
-		while (step < elapsedTime/100) {
-			step = pow(step, inc);
-			inc = inc*2;
-		}
-		System.out.println("Time for a single binary step: " + (elapsedTime/100)/step + "ns.");
+		long step = (elapsedTime/ (long)Math.log(size));
+		System.out.println("Time for a single binary step: " + step + " microsec.");
 		
-		/** Calculates worst-case time for each algorithm when n = 10^7 which is about 23*/
-		double linStep = 2;
-		inc = 1;
-		while (linStep < linElapsedTime/100) {
-			linStep = pow(linStep, inc);
-			inc = inc*2;
-		}
+		/** Calculates time for single linear step*/
+		long linStep = (linElapsedTime/size);
 		
-		System.out.println("Worst possible linear time when n = 10^7: " + 23 * linStep + " ns.");
-		System.out.println("Worst possible binary time when n = 10^7: " + 23 * step + " ns.");
+		/** n = 10^7*/
+		int n = 10000000;
+		
+		/** Calculates worst-case time for each algorithm when n = 10^7*/		
+		System.out.println("Worst possible linear time when n = 10^7: " + n * linStep + " microsec.");
+		System.out.println("Worst possible binary time when n = 10^7: " + Math.log(n) * step + " microsec.");
 				
 		/** Close the scanner*/
 		sc.close();
