@@ -13,9 +13,6 @@ import java.util.Random;
 /**Records program runtime*/
 import java.util.concurrent.TimeUnit;
 
-/** Provides advanced arithmetic functions*/
-import static java.lang.Math.*;
-
 public class Quick_Insertion_Sorts {
 	
 	/**
@@ -27,7 +24,7 @@ public class Quick_Insertion_Sorts {
 	public static void quickSort(int arr [], int lo, int up) {
 		
 		if (lo < up) {
-			int prt = partition(arr, lo, up);
+			int prt = findPartition(arr, lo, up);
 			quickSort(arr, lo, prt - 1);
 			quickSort(arr, prt + 1, up);
 		}	
@@ -40,21 +37,19 @@ public class Quick_Insertion_Sorts {
 	 */
 	public static void insertSort(int arr [], int s) {
 		
-		int x = 0;
-		int y = 0;
-		int z;
+		int i = 0;
+		int j = 0;
+		int swap;
 		
-		while (x < s) {
-			y = x;
+		for(i = 0; i < s; i++) {
+			j = i;
 			
-			while (y > 0 && arr[y-1] > arr[y]) {
-				z = arr[y];
-				arr[y] = arr[y-1];
-				arr[y-1] = z;
-				y--;
+			while (j > 0 && arr[j-1] > arr[j]) {
+				swap = arr[j];
+				arr[j] = arr[j-1];
+				arr[j-1] = swap;
+				j--;
 			}
-			
-			x++;
 		}
 	}
 	
@@ -65,26 +60,29 @@ public class Quick_Insertion_Sorts {
 	 * @param up Upper bound of algorithm
 	 * @return Partition
 	 */
-	public static int partition(int arr[], int lo, int up) {
+	public static int findPartition(int arr[], int lo, int up) {
 		
-		int up2 = arr[up];
-		int lo2 = lo;
-		int x;
+		int piv = arr[lo];
+		int prt = lo + 1;
+		int swap;
 		
-		for (int i = lo; i < up - 1; i++) {
+		for (int i = lo+1; i <= up; i++) {
 			
-			if (arr[i] <= up2) {
+			if (arr[i] >= piv) {
 				
-				x = arr[lo2];
-				arr[lo2] = arr[i];
-				arr[i] = x;
-				lo2++;
+				if(i != prt) {
+					swap = arr[i];
+					arr[i] = arr[prt];
+					arr[prt] = swap;
+					prt++;
+				}
 			}
 		}
-		x = arr[lo2];
-		arr[lo2] = arr[up];
-		arr[up] = x;
-		return lo2;
+		
+		swap = arr[prt - 1];
+		arr[prt - 1] = arr[lo];
+		arr[lo] = swap;
+		return prt - 1;
 	}
 	
 	public static void main(String[] args) {
@@ -92,6 +90,7 @@ public class Quick_Insertion_Sorts {
 		/** Variable declaration*/
 		Scanner sc = new Scanner(System.in);
 		Random ran = new Random();
+		int repeat = 100;
 		long t1 = 0;
 		long t2 = 0;
 		
@@ -101,7 +100,7 @@ public class Quick_Insertion_Sorts {
 		int [] a = new int [size];
 		
 		/** Calling quick sort 100 times, recording time*/
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < repeat; j++) {
 			for (int i = 0; i < size; i++) {
 				a[i] = ran.nextInt(10000) - 5000;
 			}
@@ -112,21 +111,23 @@ public class Quick_Insertion_Sorts {
 			t1 += (endTime - startTime);
 		}
 		System.out.println("Quick Sort:");
-		System.out.println("Average runtime: " + t1/100 + " ns.");
+		System.out.println("Average runtime: " + t1/repeat + " ns.");
+		
 		
 		/** Calling insertion sort 100 times, recording time*/
-		for (int j = 0; j < 100; j++) {
+		for (int j = 0; j < repeat; j++) {
 			for (int i = 0; i < size; i++) {
 				a[i] = ran.nextInt(10000) - 5000;
 			}
 			
 			long startTime = System.nanoTime();
-			quickSort(a, 0, size-1);
+			insertSort(a, size);
 			long endTime = System.nanoTime();
 			t2 += (endTime - startTime);
 		}
+		
 		System.out.println("Insertion Sort:");
-		System.out.println("Average runtime: " + t2/100 + " ns.");
+		System.out.println("Average runtime: " + t2/repeat + " ns.");
 		
 		/** Calculating number of insertion sorts that can be done in one second*/
 		System.out.println("Estimated insertion sorts in one second: " + 1000000000/t2 + ".");
