@@ -11,9 +11,6 @@ import java.util.Scanner;
 /** Generates random numbers*/
 import java.util.Random;
 
-/** Provides advanced arithmetic functions*/
-import static java.lang.Math.*;
-
 public class SqrtBinary {
 
 	/**
@@ -26,18 +23,16 @@ public class SqrtBinary {
 		int lo = 0;
 		double mi = 0;
 		while (lo <= up) {
+			System.out.println("Lo = " + lo + ", up = " + up + ", mi = " + mi);//test
 			mi = lo + (up - lo) / 2;
-			//System.out.println("Mi = " + mi + ", lo = " + lo + ", up = " + up );//test
-	        if (mi * mi == n) { 
+	        if (mi * mi == n) { //sqrt found
 	            return mi; 
 	        }
-	        if (mi * mi < n) {
+	        if (mi * mi < n) { //sqrt too low
 	            lo = (int)mi + 1; 
-	            //System.out.println("Mi^2 < n, lo = " + lo);//test
 	        }
 	        else{
-	            up = (int)mi - 1;
-	        	//System.out.println("Mi^2 > n, up = " + up);//test
+	            up = (int)mi - 1; //sqrt too high
 	        }
 		}
 		
@@ -46,30 +41,23 @@ public class SqrtBinary {
 		double loD = lo - 1;
 		while (loD <= upD) {
 			mi = loD + (upD - loD) / 2;
-			//System.out.println("Mi = " + mi + ", loD = " + loD + ", upD = " + upD );//test
-	        if (mi * mi < n) {
+	        if (mi * mi < n) { //too low
 	            loD = mi + 0.1; 
-	            //System.out.println("Mi^2 < n, loD = " + loD);//test
 	        }
 	        else{
-	            upD = mi - 0.1;
-	        	//System.out.println("Mi^2 > n, upD = " + upD);//test
+	            upD = mi - 0.1; //too high
 	        }
 		}
 
 		upD = upD + 0.1;
 		loD = loD - 0.1;
-		System.out.println(upD + " " + loD);
 		while (loD <= upD) {
 			mi = loD + (upD - loD) / 2;
-			//System.out.println("Mi = " + mi + ", loD = " + loD + ", upD = " + upD );//test
-	        if (mi * mi < n) {
-	            loD = mi + 0.01; 
-	            //System.out.println("Mi^2 < n, loD = " + loD);//test
+	        if (mi * mi < n) {//too low
+	            loD = mi + 0.01;
 	        }
 	        else{
-	            upD = mi - 0.01;
-	        	//System.out.println("Mi^2 > n, upD = " + upD);//test
+	            upD = mi - 0.01;//too high
 	        }
 		}
 		mi = loD * 100;
@@ -90,14 +78,13 @@ public class SqrtBinary {
 		int mi = 0;
 		while (lo <= up) {
 			mi = lo + (up - lo) / 2;
-			//System.out.println("lo = " + lo + ", up = " + up + ", mi = " + mi);//test
-	        if (mi > 0 && mi <= s-1 && arr[mi] == 1 && arr[mi-1] == 0) { 
+	        if (mi > 0 && mi <= s-1 && arr[mi] == 1 && arr[mi-1] == 0) { //on boundary
 	            return mi; 
 	        }
-	        if (mi > 0 && mi <= s-1 && arr[mi] == 0) {
+	        if (mi > 0 && mi <= s-1 && arr[mi] == 0) { //before boundary
 	            lo = mi + 1; 
 	        }
-	        else if(mi > 0 && mi <= s-1 && arr[mi] == 1){
+	        else if(mi > 0 && mi <= s-1 && arr[mi] == 1){ //after boundary
 	            up = mi - 1; 
 	        }
 	        else {
@@ -133,7 +120,7 @@ public class SqrtBinary {
 			System.out.println("There is no split.");
 		}
 		else {
-			System.out.println("Split location = " + splt);
+			System.out.println("Split index location = " + splt);
 		}
 		
 		sc.close();
