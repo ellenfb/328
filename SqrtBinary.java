@@ -23,7 +23,7 @@ public class SqrtBinary {
 		int lo = 0;
 		double mi = 0;
 		while (lo <= up) {
-			System.out.println("Lo = " + lo + ", up = " + up + ", mi = " + mi);//test
+			//System.out.println("Lo = " + lo + ", up = " + up + ", mi = " + mi);//test
 			mi = lo + (up - lo) / 2;
 	        if (mi * mi == n) { //sqrt found
 	            return mi; 
@@ -63,6 +63,8 @@ public class SqrtBinary {
 		mi = loD * 100;
 		int m = (int)mi;
 		mi = (double)m / 100;
+		System.out.println("Floor = " + (int)mi);
+		System.out.println("Ceiling = " + ((int)mi+1));
 		return mi;
 	}
 	
@@ -120,7 +122,7 @@ public class SqrtBinary {
 			System.out.println("There is no split.");
 		}
 		else {
-			System.out.println("Split index location = " + splt);
+			System.out.println("Split location = " + splt);
 		}
 		
 		sc.close();
