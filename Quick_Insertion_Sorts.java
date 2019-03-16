@@ -10,9 +10,6 @@ import java.util.Scanner;
 /** Generates random numbers*/
 import java.util.Random;
 
-/**Records program runtime*/
-import java.util.concurrent.TimeUnit;
-
 public class Quick_Insertion_Sorts {
 	
 	/**
@@ -23,8 +20,13 @@ public class Quick_Insertion_Sorts {
 	 */
 	public static void quickSort(int arr [], int lo, int up) {
 		
+		/** If lo >= up, the current recursion is the last one */
 		if (lo < up) {
+			
+			/** Finds a new pivot to partition around */
 			int prt = findPartition(arr, lo, up);
+			
+			/** Partitions into two subarrays, recursively sorting the entire array around pivots */
 			quickSort(arr, lo, prt - 1);
 			quickSort(arr, prt + 1, up);
 		}	
@@ -41,9 +43,11 @@ public class Quick_Insertion_Sorts {
 		int j = 0;
 		int swap;
 		
+		/** Iterates through each element of array */
 		for(i = 0; i < s; i++) {
 			j = i;
 			
+			/** When element is greater than following element, they're swapped */
 			while (j > 0 && arr[j-1] > arr[j]) {
 				swap = arr[j];
 				arr[j] = arr[j-1];
@@ -62,12 +66,18 @@ public class Quick_Insertion_Sorts {
 	 */
 	public static int findPartition(int arr[], int lo, int up) {
 		
+		/** Pivot is set to the beginning of the array */
 		int piv = arr[lo];
 		int prt = lo + 1;
 		int swap;
 		
+		/** Iterates up through array */
 		for (int i = lo+1; i <= up; i++) {
 			
+			/**
+			 * If array element is >= to pivot, swapped with element after pivot
+			 * Pivot is then incremented so next swap occurs on element position after previous
+			 */
 			if (arr[i] >= piv) {
 				
 				if(i != prt) {
@@ -79,6 +89,7 @@ public class Quick_Insertion_Sorts {
 			}
 		}
 		
+		/** New partition and beginning of array are swapped, new partition returned */
 		swap = arr[prt - 1];
 		arr[prt - 1] = arr[lo];
 		arr[lo] = swap;
@@ -111,8 +122,7 @@ public class Quick_Insertion_Sorts {
 			t1 += (endTime - startTime);
 		}
 		System.out.println("Quick Sort:");
-		System.out.println("Average runtime: " + t1/repeat + " ns.");
-		
+		System.out.println("Average runtime: " + t1/100 + " ns.");
 		
 		/** Calling insertion sort 100 times, recording time*/
 		for (int j = 0; j < repeat; j++) {
@@ -127,10 +137,13 @@ public class Quick_Insertion_Sorts {
 		}
 		
 		System.out.println("Insertion Sort:");
-		System.out.println("Average runtime: " + t2/repeat + " ns.");
+		System.out.println("Average runtime: " + t2/100 + " ns.");
+		
+		/** Amount of nanoseconds in a second */
+		double sec = 1000000000;
 		
 		/** Calculating number of insertion sorts that can be done in one second*/
-		System.out.println("Estimated insertion sorts in one second: " + 1000000000/t2 + ".");
+		System.out.println("Estimated insertion sorts in one second: " + sec/t2 + ".");
 		
 		/** Closing the scanner*/
 		sc.close();
