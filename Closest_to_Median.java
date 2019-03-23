@@ -6,7 +6,7 @@
 
 /** Uses user input */
 import java.util.Scanner;
-
+import java.util.Arrays;
 /** Generates random numbers */
 import java.util.Random;
 
@@ -19,24 +19,33 @@ public class Closest_to_Median {
 	 * @param up Upper bound of algorithm
 	 * @return Partition
 	 */
-	public static int findPartition(int [] arr, int lo, int up) {
+	public static int findPartition(int arr[], int lo, int up) {
 		
-		int piv = arr[up], 
-		prt = lo;
+		/** Pivot is set to the beginning of the array */
+		int piv = arr[lo];
+		int prt = up;
 		int swap;
-		for (int i = lo; i <= up - 1; i++) { 
-			
-			if (piv >= arr[i]) { 
-				swap = arr[prt]; 
-				arr[prt] = arr[i]; 
-				arr[i] = swap; 
-				prt++; 
-            } 
-        } 
 		
-		swap = arr[prt]; 
-		arr[prt] = arr[up]; 
-		arr[up] = swap; 
+		/** Iterates down through array */
+		for (int i = up; i > lo; i--) {
+			
+			/**
+			 * If pivot is <= array element at i, swapped with element at position prt
+			 * prt is then decremented so the position before it is the location of the next swap if any
+			 */
+			if (piv <= arr[i]) {
+				
+				swap = arr[i];
+				arr[i] = arr[prt];
+				arr[prt] = swap;
+				prt--;
+			}
+		}
+		
+		/** prt and beginning of array are swapped, prt returned */
+		swap = arr[prt];
+		arr[prt] = arr[lo];
+		arr[lo] = swap;
 		return prt;
 	}
 	
@@ -60,80 +69,18 @@ public class Closest_to_Median {
 				prt = findPartition(arr, prt + 1, up);
 			}
 		}	
-		return arr[prt];
-	}
-	
+		return prt;
+	}	
 	
 	public static void quickSelectMedian(int [] arr, int lo, int size, int k, int med) {
 		
-		/** Stores values closest to median */
-		int [] values;
+		quickSelect(arr, lo, size-1, k);
 		
-		/** Iterates through values array */
-		int c = 0;
+		System.out.println(Arrays.toString(arr));//test
 		
-		/** Size of array - 1, used in quickSelect */
-		int up = size - 1;
-		
-		/** Size of array/2, used to locate positions of values around median */
-		int pos = size/2;
-		
-		/** Start and end for array, declared below based on size of array and number of elements to be found */
-		int start;
-		int end;
-		
-		/** Even array size, odd k */
-		if(size % 2 == 0 && k % 2 == 1) {
-			start = pos - k/2 - 1;
-			end = pos + k/2 + 1;
-			values = new int [k + 2];
-		}
-		
-		/** Odd array size, even k */
-		else if(size % 2 == 1 && k % 2 == 0) {
-			start = pos - k/2;
-			end = pos + k/2 +1;
-			values = new int [k + 2];
-		}
-		
-		/** Even array size, even k */
-		else if(size % 2 == 0 && k % 2 == 0) {
-			start = pos - k/2;
-			end = pos + k/2;
-			values = new int [k];
-		}
-		
-		/** Odd array size, odd k */
-		else {
-			start = pos - k/2 - 1;
-			end = pos + k/2 + 2;
-			values = new int [k + 3];
-		}
-		
-		System.out.println(k + " numbers closest to median: ");
-		
-		/** Finds the values surrounding the array using quickSelect */
-		for(int i = start; i < end; i++) {
-			values[c] = quickSelect(arr, lo, up, i+1);
-			c++;
-		}
-		
-		/** If an odd number of elements in values, checks which outer bound's absolute value is greater and ignores it when printing */
-		if(k % 2 == 1) {
-			if(Math.abs(values[0]) > Math.abs(values[c-1])) {
-				start = 1;
-			}
-		}
-		else {
-			start = 0;
-			end = c;
-		}
-		
-		/** Prints the array of values around median, skipping the median itself */
-		for(int i = start; i < end; i++) {
-			if(values[i] + med != med){
-				System.out.print((values[i]+med) + " ");
-			}
+		System.out.println(k + " closest elements to median:");
+		for(int i = 1; i < k+1; i++) {
+			System.out.print((arr[i] + med) + " ");
 		}
 	}
 
@@ -150,8 +97,8 @@ public class Closest_to_Median {
 		int [] a = new int [n];
 		for(int i = 0; i < n; i++) {
 			a[i] = ran.nextInt(200)-100;
-			System.out.println("a[" + i + "] = " + a[i]);
 		}
+		System.out.println(Arrays.toString(a));
 		
 		
 		
@@ -168,11 +115,11 @@ public class Closest_to_Median {
 		int median;
 		if(n % 2 == 0) {
 			/** If array size is even, find average of two numbers closest to median */
-			median = (quickSelect(a, 0, n-1, n/2) + quickSelect(a, 0, n-1, n/2 + 1))/2;
+			median = a[(quickSelect(a, 0, n-1, n/2) + quickSelect(a, 0, n-1, n/2 + 1))/2];
 		}
 		else {
 			/** if array size is odd, find middle number */
-			median = quickSelect(a, 0, n-1, n/2 + 1);
+			median = a[quickSelect(a, 0, n-1, n/2 + 1)];
 		}
 		System.out.println("Median = " + median + ".");
 		
@@ -184,9 +131,9 @@ public class Closest_to_Median {
 		 */
 		int [] diff = new int [n];
 		for(int i = 0; i < n; i++) {
-			diff[i] = a[i] - median;
-			System.out.println("diff[" + i + "] = " + diff[i]);
+			diff[i] = Math.abs(a[i] - median);
 		}
+		System.out.println(Arrays.toString(diff));
 		
 		
 		
