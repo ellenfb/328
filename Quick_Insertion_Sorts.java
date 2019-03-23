@@ -6,7 +6,7 @@
 
 /** Uses user input*/
 import java.util.Scanner;
-
+import java.util.Arrays;
 /** Generates random numbers*/
 import java.util.Random;
 
@@ -33,29 +33,6 @@ public class Quick_Insertion_Sorts {
 	}
 	
 	/**
-	 * Insertion sorts an array
-	 * @param arr Array to be sorted
-	 * @param s Size of array
-	 */
-	public static void insertSort(int arr [], int s) {
-		
-		int swap;
-		
-		/** Iterates through each element of array */
-		for(int i = 0; i < s; i++) {
-			int j = i;
-			
-			/** When element is greater than following element, they're swapped */
-			while (j > 0 && arr[j-1] > arr[j]) {
-				swap = arr[j];
-				arr[j] = arr[j-1];
-				arr[j-1] = swap;
-				j--;
-			}
-		}
-	}
-	
-	/**
 	 * Finds the partition for the sort algorithm
 	 * @param arr Array being partitioned
 	 * @param lo Lower bound of algorithm
@@ -78,12 +55,10 @@ public class Quick_Insertion_Sorts {
 			 */
 			if (piv <= arr[i]) {
 				
-				if(i != prt) {
-					swap = arr[i];
-					arr[i] = arr[prt];
-					arr[prt] = swap;
-					prt--;
-				}
+				swap = arr[i];
+				arr[i] = arr[prt];
+				arr[prt] = swap;
+				prt--;
 			}
 		}
 		
@@ -92,6 +67,29 @@ public class Quick_Insertion_Sorts {
 		arr[prt] = arr[lo];
 		arr[lo] = swap;
 		return prt;
+	}
+	
+	/**
+	 * Insertion sorts an array
+	 * @param arr Array to be sorted
+	 * @param s Size of array
+	 */
+	public static void insertSort(int arr [], int s) {
+		
+		int swap;
+		
+		/** Iterates through each element of array */
+		for(int i = 0; i < s; i++) {
+			int j = i;
+			
+			/** When element is greater than following element, they're swapped */
+			while (j > 0 && arr[j-1] > arr[j]) {
+				swap = arr[j];
+				arr[j] = arr[j-1];
+				arr[j-1] = swap;
+				j--;
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -121,6 +119,8 @@ public class Quick_Insertion_Sorts {
 		}
 		System.out.println("Quick Sort:");
 		System.out.println("Average runtime: " + t1/100 + " ns.");
+		
+		System.out.println(Arrays.toString(a));//test
 		
 		/** Calling insertion sort 100 times, recording time*/
 		for (int j = 0; j < repeat; j++) {
