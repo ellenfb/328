@@ -39,13 +39,11 @@ public class Quick_Insertion_Sorts {
 	 */
 	public static void insertSort(int arr [], int s) {
 		
-		int i = 0;
-		int j = 0;
 		int swap;
 		
 		/** Iterates through each element of array */
-		for(i = 0; i < s; i++) {
-			j = i;
+		for(int i = 0; i < s; i++) {
+			int j = i;
 			
 			/** When element is greater than following element, they're swapped */
 			while (j > 0 && arr[j-1] > arr[j]) {
@@ -68,32 +66,32 @@ public class Quick_Insertion_Sorts {
 		
 		/** Pivot is set to the beginning of the array */
 		int piv = arr[lo];
-		int prt = lo + 1;
+		int prt = up;
 		int swap;
 		
-		/** Iterates up through array */
-		for (int i = lo+1; i <= up; i++) {
+		/** Iterates down through array */
+		for (int i = up; i > lo; i--) {
 			
 			/**
-			 * If array element is >= to pivot, swapped with element after pivot
-			 * Pivot is then incremented so next swap occurs on element position after previous
+			 * If pivot is <= array element at i, swapped with element at position prt
+			 * prt is then decremented so the position before it is the location of the next swap if any
 			 */
-			if (arr[i] >= piv) {
+			if (piv <= arr[i]) {
 				
 				if(i != prt) {
 					swap = arr[i];
 					arr[i] = arr[prt];
 					arr[prt] = swap;
-					prt++;
+					prt--;
 				}
 			}
 		}
 		
-		/** New partition and beginning of array are swapped, new partition returned */
-		swap = arr[prt - 1];
-		arr[prt - 1] = arr[lo];
+		/** prt and beginning of array are swapped, prt returned */
+		swap = arr[prt];
+		arr[prt] = arr[lo];
 		arr[lo] = swap;
-		return prt - 1;
+		return prt;
 	}
 	
 	public static void main(String[] args) {
@@ -143,10 +141,12 @@ public class Quick_Insertion_Sorts {
 		double sec = 1000000000;
 		
 		/** Calculating number of insertion sorts that can be done in one second*/
-		System.out.println("Estimated insertion sorts in one second: " + sec/t2 + ".");
+		System.out.println("Estimated insertion sorts in one second: " + sec/(t2/100) + ".");
 		
 		/** Closing the scanner*/
 		sc.close();
+		
+		
 	}
 
 }
