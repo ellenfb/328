@@ -47,7 +47,6 @@ public class MPSS {
 		/** Pivot is set to the beginning of the array */
 		double piv = arr[lo];
 		int prt = up;
-		int swap;
 		
 		/** Iterates down through array */
 		for (int i = up; i > lo; i--) {
@@ -120,9 +119,17 @@ public class MPSS {
 		return prt;
 	}
 	
-	/***/
+	/**
+	 * Finds the minimum positive sum subset of the left and right half of the given array
+	 * In the context of the program, it repeatedly breaks down an array to find the MPSS of the entirety of each half
+	 * @param arr Array to be searched
+	 * @param lo Lower bound of array being searched
+	 * @param hi Upper bound of array being searched
+	 * @return MPSS of the results of each iteration
+	 */
 	public static double MPSS_Subset(double [] arr, int lo, int hi) {
 		
+		/** When broken down array contains only one element. Returns positive infinity if element is negative */
 		if(lo == hi) {
 			if(arr[lo] < 0) {
 				return Double.POSITIVE_INFINITY;
@@ -130,27 +137,49 @@ public class MPSS {
 			return arr[lo];
 		}
 		
+		/** Finding mid point to divide array with */
 		int mid = (hi + lo)/2;
 		
+		/** Recursively calls the function with a smaller array segment each time, returning the smallest MPSS of them all */
 		return Math.min(Math.min(MPSS_Subset(arr, lo, mid), MPSS_Subset(arr, mid+1, hi)), 
-				MPSS_Alg(arr, lo, hi));
+				MPSS_Alg(arr, lo, hi, mid));
 	}
 	
-	/***/
-	public static double MPSS_Alg(double [] arr, int lo, int hi) {
+	/**
+	 * Function that finds the MPSS of the array segments created in MPSS_Subset
+	 * @param arr Array to be searched
+	 * @param lo Lower bound
+	 * @param hi Upper bound
+	 * @param mid Midpoint of the array
+	 * @return Returns the MPSS of the array segment
+	 */
+	public static double MPSS_Alg(double [] arr, int lo, int hi, int mid) {
 		
-		double sum = 0;
+		double tmp = 0;
+		double sumL = Double.POSITIVE_INFINITY;
+		double sumR = Double.POSITIVE_INFINITY;
 		
-		for(int i = lo; i <= hi; i++) {
-			sum += arr[i];
+		/** Finds the sum of the left half, stores into sumL if it meets MPSS conditions */
+		for(int i = mid; i >= lo; i--) {
+			tmp += arr[i];
+			if(tmp >= 0 && tmp < sumL) {
+				sumL = tmp;
+			}
 		}
 		
-		if(sum < 0) {
-			return Double.POSITIVE_INFINITY;
+		tmp = 0;
+		
+		/** Finds the sum of the right half, stores into sumL if it meets MPSS conditions */
+		for(int i = mid + 1; i <= hi; i++) {
+			tmp += arr[i];
+			if(tmp >= 0 && tmp < sumR) {
+				sumR = tmp;
+			}
 		}
 		
-		System.out.println("Sub sum = " + sum);
-		return sum;
+		/** Returns the segment's sum by adding its too halves together */
+		return sumL + sumR;
+		
 	}
 	
 	/**
@@ -165,32 +194,42 @@ public class MPSS {
 		double s = 0;
 		double min = Double.POSITIVE_INFINITY;
 		
+		/** Iterates through each sum array until one is exhausted */
 		while(i < sL.length && j < sR.length) {
-			System.out.println(s + " = " + sL[i] + " + " + sR[j]);
+			
+			/** Adds the sums from one element of each array */
+			//System.out.println(s + " = " + sL[i] + " + " + sR[j]);
 			s = sL[i] + sR[j];
 			
+			/** If sum <= 0, try with the next element of left array */
 			if(s <= 0) {
-				System.out.println("s = " + s + " <= zero");
+				//System.out.println("s = " + s + " <= zero");
 				i++;
 			}
+			
+			/** If sum < current minimum (starting at positive infinity), sets it as the new minimum and tries with next element of right array */
 			else if(s < min) {
-				System.out.println("s = " + s + " < min = " + min);
+				//System.out.println("s = " + s + " < min = " + min);
 				min = s;
 				j++;
 			}
+			
+			/** If sum > min, try with next element of right array */
 			else {
-				System.out.println("s = " + s + " > min = " + min);
+				//System.out.println("s = " + s + " > min = " + min);
 				j++;
 			}
 		}
+		
+		/** Sets middle as minimum subset across the middle of the array and returns it */
 		double middle = min;
 		
-		if(middle == Double.POSITIVE_INFINITY) {
+		/*if(middle == Double.POSITIVE_INFINITY) {
 			System.out.println("No subset results in a positive result.");
 		}
 		else {
 			System.out.println("MPSS Mid = " + middle);
-		}
+		}*/
 		
 		return middle;
 	}
@@ -247,6 +286,7 @@ public class MPSS {
 		randomize(array, size, ran, 40,-20);
 		trim(array, size);*/
 		
+		/** Pre-made array currently in use */
 		int size = 10;
 		double [] array = {2, -3, 1, 4, -6, 10, -12, 5.2, 3.6, -8};
 		
@@ -281,8 +321,8 @@ public class MPSS {
 		trim(sR, sR.length);
 		quickSortDown(sR, 0, sR.length - 1);
 		
-		System.out.println(Arrays.toString(sL));
-		System.out.println(Arrays.toString(sR));
+		/*System.out.println(Arrays.toString(sL));
+		System.out.println(Arrays.toString(sR));*/
 		
 		/** Finding minimum sum within left and right half */
 		double subset = MPSS_Subset(array, 0, size - 1);
@@ -290,7 +330,7 @@ public class MPSS {
 		/** Finding minimum sum across entire array */
 		double middle = MPSSMid(sL, sR);
 		
-		System.out.println(subset + ", " + middle);//test
+		//System.out.println(subset + ", " + middle);//test
 		
 		/** Printing result */
 		if(subset == Double.POSITIVE_INFINITY && middle == Double.POSITIVE_INFINITY) {
@@ -301,18 +341,7 @@ public class MPSS {
 		}
 		else {
 			System.out.println("MPSS = " + middle);
-		}
-		
-		//System.out.println(Arrays.toString(array));//test
-		
-		
-		
-		
-		//test
-		
-		//System.out.println(Arrays.toString(sL));
-		//System.out.println(Arrays.toString(sR));
-		
+		}		
 		
 		scan.close();
 	}
