@@ -40,17 +40,16 @@ public class MSS {
 	 */
 	public static int MSS_1_Subset(int [] arr, int lo, int hi) {
 		
+		/** Finding mid point to divide array with */
+		int mid = (hi + lo)/2;
+		
 		/** When broken down array contains only one element. Returns positive infinity if element is negative */
 		if(lo == hi) {
 			return arr[hi];
 		}
 		
-		/** Finding mid point to divide array with */
-		int mid = (hi + lo)/2;
-		
-		/** Recursively calls the function with a smaller array segment each time, returning the smallest MPSS of them all */
-		return Math.max(Math.max(MSS_1_Subset(arr, lo, mid), MSS_1_Subset(arr, mid+1, hi)), 
-				MPSS_1_Alg(arr, lo, hi, mid));
+		/** Recursively calls the function with a smaller array segment each time, returning the smallest MSS of them all */
+		return Math.max(MSS_1_Alg(arr, lo, hi, mid), Math.max(MSS_1_Subset(arr, lo, mid), MSS_1_Subset(arr, mid+1, hi)));
 	}
 	
 	/**
@@ -60,34 +59,34 @@ public class MSS {
 	 * @param lo Lower bound
 	 * @param hi Upper bound
 	 * @param mid Midpoint of the array
-	 * @return Returns the MPSS of the array segment
+	 * @return Returns the MSS of the array segment
 	 */
-	public static int MPSS_1_Alg(int [] arr, int lo, int hi, int mid) {
+	public static int MSS_1_Alg(int [] arr, int lo, int hi, int mid) {
 		
 		int tmp = 0;
 		int sumL = 0;
 		int sumR = 0;
 		
-		/** Finds the sum of the left half, stores into sumL if it meets MPSS conditions */
+		/** Finds the sum of the left half, stores into sumL if it meets MSS conditions */
 		for(int i = mid; i >= lo; i--) {
-			tmp += arr[i];
+			tmp = tmp + arr[i];
 			if(tmp > sumL) {
 				sumL = tmp;
 			}
 		}
 		
+		/** Finds the sum of the right half, stores into sumL if it meets MSS conditions */
 		tmp = 0;
-		
-		/** Finds the sum of the right half, stores into sumL if it meets MPSS conditions */
 		for(int i = mid + 1; i <= hi; i++) {
-			tmp += arr[i];
+			tmp = tmp + arr[i];
 			if(tmp > sumR) {
 				sumR = tmp;
 			}
 		}
 		
 		/** Returns the segment's sum by adding its too halves together */
-		return sumL + sumR;
+		tmp = sumL + sumR;
+		return tmp;
 		
 	}
 	
@@ -101,28 +100,28 @@ public class MSS {
 	 */
 	public static int MSS_2(int [] arr, int lo, int hi) {
 		
-		/** Keeps track of maximum sum found and current sum */
+		/** Keeps track of maximum sum found and current sum in tmp */
 		int max = 0;
-		int sum = 0;
+		int tmp = 0;
 		
 		/** Iterates through array */
 		for(int i = 0; i <= hi; i++) {
 			
-			/** Adds array elements into sum */
-			sum += arr[i];
+			/** Adds array elements into tmp */
+			tmp = tmp + arr[i];
 			
 			/** If new maximum found, set max to it */
-			if(sum > max) {
-				max = sum;
+			if(tmp > max) {
+				max = tmp;
 			}
 			
-			/** If sum drops below zero, reset to zero */
-			else if (sum < 0) {
-				sum = 0;
+			/** If tmp drops below zero, reset to zero */
+			else if (tmp < 0) {
+				tmp = 0;
 			}
 		}
 		
-		/** Return mss */
+		/** Return MSS */
 		return max;
 	}
 
