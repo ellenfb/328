@@ -31,6 +31,18 @@ public class Node {
 	}
 	
 	/**
+	 * Constructor allowing exclusively the adjacency list to be filled
+	 * @param adjFull Full adjacency list for this node
+	 */
+	public Node(Node [] adjFull) {
+		parent = null;
+		adj = adjFull;
+		start = 0;
+		end = 0;
+		distance = 0;
+	}
+	
+	/**
 	 * Constructor for creating a node with all values assigned
 	 * @param p Parent value
 	 * @param a Adjacency values
@@ -46,7 +58,7 @@ public class Node {
 		distance = d;
 	}
 	
-	/*public void adj() {
-		
-	}*/
+	public void setAdj(Node [] adjFull) {
+		adj = adjFull;
+	}
 }

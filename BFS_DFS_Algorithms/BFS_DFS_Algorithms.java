@@ -97,15 +97,41 @@ public class BFS_DFS_Algorithms {
 		
 		//
 		
+		/** Creating graph of 8 note vertices and 10 edges */
 		int V = 8;
+		//int E = 10;
+		
 		Node [] array = new Node [8];
-		
-		int E = 10;
-		
-		//
+		for(int i = 0; i < 8; i++) {
+			array[i] = new Node();
+		}
+		/**
+		 * 0 -> 1
+		 * 1 -> 2, 3
+		 * 2 -> 0
+		 * 3 -> 2
+		 * 4 -> 3, 5, 6
+		 * 5 -> 6
+		 * 6 -> none
+		 * 7 -> 3
+		 */
+		array[0].setAdj(new Node [] {array[1]});
+		array[1].setAdj(new Node [] {array[2], array[3]});
+		array[2].setAdj(new Node [] {array[0]});
+		array[3].setAdj(new Node [] {array[2]});
+		array[4].setAdj(new Node [] {array[3], array[5], array[6]});
+		array[5].setAdj(new Node [] {array[6]});
+		array[6].setAdj(new Node [] {}); //empty
+		array[7].setAdj(new Node [] {array[3]});
 		
 		System.out.println("Enter the starting vertex");
+		int u = scan.nextInt();
 		
+		BFS(array[u - 1]);
+		
+		for(int i = 0; i < 8; i++) {
+			System.out.println("Node " + (i + 1) + " distance = " + array[i].distance);
+		}
 		
 		scan.close();		
 
