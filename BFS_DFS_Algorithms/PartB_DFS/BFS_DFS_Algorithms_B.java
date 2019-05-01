@@ -14,52 +14,46 @@ import java.util.Scanner;
 /** Generates random numbers */
 //import java.util.Random;
 
-/** Allows use of Java Queues */
-import java.util.Queue;
+/** Allows use of LinkedLists */
 import java.util.LinkedList;
 
-public class BFS_DFS_Algorithms {
+public class BFS_DFS_Algorithms_B {
 	
 	/** Used to keep track of start and end in DFS */
 	public static int time = 0;
 	
 	/**
-	 * Breadth First Search algorithm that traverses an entire graph by taking a starting node, 
-	 * searching its neighbors, then its neighbor's neighbors and so on
-	 * @param v Starting node that allows access to the rest of the graph via adjacency array
+	 * DFS moves through every node in the graph, recording the start and end times and noticing loops
+	 * @param n Graph of nodes
 	 */
-	public static void BFS(Node v) {
+	public static void DFS(Node [] n) {//parameter?
 		
-		/** Treats the given node as the start point and pushes it to an empty queue */
-		v.distance = 0;
-		v.parent = null;
-		Queue <Node> q = new LinkedList<>();
-		q.add(v);
+		LinkedList <Node> list = new LinkedList<Node>();
 		
-		/** Iterates through values added to queue until empty, added values are each node in graph*/
-		while(q.size() != 0) {
+		/** Iterates through every node of graph */
+		for(int i = 0; i < n.length; i++) {
 			
-			/** Pops the queue, takes its value in a new pointer as well as its adjacency */
-			Node w = q.remove(); //note: takes pointer, not copy
-			Node [] adj = w.adj; //same as above
+			/** Sets id of node */
+			n[i].id = i + 1;
 			
-			/** Iterates through the adjacent values of the node popped from queue */
-			for(int i = 0; i < adj.length; i++) {//adj[i] = u
+			/** If parent is null, calls DFSVisit on the node */
+			if(n[i].parent == null) {
 				
-				/** If the adjacent node's parent is null, set its pointer to w and add to queue */
-				if(adj[i].parent == null) {
-					
-					adj[i].parent = w;
-					adj[i].distance = w.distance + 1;
-					q.add(adj[i]);
-				}
-				
+				//n[i].parent = null;
+				DFSVisit(n[i]);
 			}
 			
+			list.add(n[i]);
+			
+			/** Prints the start and end time of the node */
+			System.out.println("Node " + (i + 1) + " start = " + n[i].start + ", end = " + n[i].end);
 		}
 		
+		while(list.pollFirst() != null) {
+			System.out.println(list.remove().toString());
+		}
 	}
-
+	
 	/**
 	 * Finds the vertexes reachable from the starting node v and assigns the start/end times
 	 * @param v Starting node
@@ -82,7 +76,7 @@ public class BFS_DFS_Algorithms {
 			/** Checks if there is a cycle */
 			else if(v.adj[i].start != 0 && v.adj[i].end == 0) {
 				
-				System.out.println("Cycle detected.");
+				System.out.println("Cycle detected, topological sort is impossible.");
 			}
 		}
 		
@@ -91,7 +85,6 @@ public class BFS_DFS_Algorithms {
 		v.end = time;
 	}
 
-	/** Main method */
 	public static void main(String[] args) {
 		
 		/** Scanner and random objects */
@@ -108,6 +101,7 @@ public class BFS_DFS_Algorithms {
 		}
 		
 		/**
+		 * In this version, there are no cycles
 		 * 0 -> 1
 		 * 1 -> 2, 3
 		 * 2 -> 0
@@ -118,7 +112,7 @@ public class BFS_DFS_Algorithms {
 		 * 7 -> 3
 		 */
 		array[0].setAdj(new Node [] {array[1]});
-		array[1].setAdj(new Node [] {array[2], array[3]});
+		array[1].setAdj(new Node [] {});
 		array[2].setAdj(new Node [] {array[0]});
 		array[3].setAdj(new Node [] {array[2]});
 		array[4].setAdj(new Node [] {array[3], array[5], array[6]});
@@ -126,26 +120,8 @@ public class BFS_DFS_Algorithms {
 		array[6].setAdj(new Node [] {});
 		array[7].setAdj(new Node [] {array[3]});
 		
-		/** Asking for the node to start the algorithm from */
-		System.out.println("Enter the starting vertex");
-		int u = scan.nextInt();
-		
-		/** Calling BFS algorithm */
-		BFS(array[u - 1]);
-		
-		/** Printing the distances from the starting nodes found by BFS. Note: BFS cannot detect cycles */
-		System.out.println("BFS distances starting from node " + u + ":");
-		for(int i = 0; i < 8; i++) {
-			System.out.println("Node " + (i + 1) + " distance = " + array[i].distance);
-		}
-		
-		/** Calling DFSVisit to find nodes reachable from starting node u */
-		DFSVisit(array[u - 1]);
-		
-		System.out.println("DFS start and end times from node " + u + ":");
-		for(int i = 0; i < 8; i++) {
-			System.out.println("Node " + (i + 1) + " start = " + array[i].start + ", end = " + array[i].end);
-		}
+		/** Calling the DFS function on the array for every node in the graph */
+		DFS(array);
 		
 		scan.close();		
 
