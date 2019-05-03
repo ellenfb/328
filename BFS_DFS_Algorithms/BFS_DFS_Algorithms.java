@@ -8,9 +8,6 @@
 /** Uses user input */
 import java.util.Scanner;
 
-/** Allows use of array functions */
-//import java.util.Arrays;
-
 /** Generates random numbers */
 //import java.util.Random;
 
@@ -99,7 +96,7 @@ public class BFS_DFS_Algorithms {
 		//Random ran = new Random();
 		
 		/** Creating graph of 8 note vertices and 10 edges */
-		int V = 8;
+		//int V = 8;
 		//int E = 10;
 		
 		Node [] array = new Node [8];

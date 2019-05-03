@@ -8,9 +8,6 @@
 /** Uses user input */
 import java.util.Scanner;
 
-/** Allows use of array functions */
-//import java.util.Arrays;
-
 /** Generates random numbers */
 //import java.util.Random;
 
@@ -22,14 +19,15 @@ public class BFS_DFS_Algorithms_B {
 	/** Used to keep track of start and end in DFS */
 	public static int time = 0;
 	
+	/** Used for topological ordering */
+	public static LinkedList <Node> list = new LinkedList<Node>();
+	
 	/**
 	 * DFS moves through every node in the graph, recording the start and end times and noticing loops
 	 * @param n Graph of nodes
 	 */
-	public static void DFS(Node [] n) {//parameter?
-		
-		LinkedList <Node> list = new LinkedList<Node>();
-		
+	public static void DFS(Node [] n) {
+			
 		/** Iterates through every node of graph */
 		for(int i = 0; i < n.length; i++) {
 			
@@ -42,15 +40,13 @@ public class BFS_DFS_Algorithms_B {
 				//n[i].parent = null;
 				DFSVisit(n[i]);
 			}
-			
-			list.add(n[i]);
-			
-			/** Prints the start and end time of the node */
-			System.out.println("Node " + (i + 1) + " start = " + n[i].start + ", end = " + n[i].end);
+
 		}
 		
-		while(list.pollFirst() != null) {
-			System.out.println(list.remove().toString());
+		/** Iterates through the topological list and prints the start and end times of each node */
+		while(list.peekFirst() != null) {
+			Node tmp = list.remove();
+			System.out.println("Node " + tmp.toString() + " start = " + tmp.start + ", end = " + tmp.end);
 		}
 	}
 	
@@ -83,8 +79,12 @@ public class BFS_DFS_Algorithms_B {
 		/** Increments the time after the recursion is done for each value and sets it to the end time */
 		time++;
 		v.end = time;
+		
+		/** Adds the vertex to the topological list when it is finished being used */
+		list.add(v);
 	}
 
+	/** Main method */
 	public static void main(String[] args) {
 		
 		/** Scanner and random objects */
@@ -92,7 +92,7 @@ public class BFS_DFS_Algorithms_B {
 		//Random ran = new Random();
 		
 		/** Creating graph of 8 note vertices and 10 edges */
-		int V = 8;
+		//int V = 8;
 		//int E = 10;
 		
 		Node [] array = new Node [8];
