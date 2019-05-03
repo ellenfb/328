@@ -264,6 +264,7 @@ public class MPSS {
 	/**
 	 * Trims the decimal values after one place
 	 * @param Array with values to trim
+	 * @param size Size of array
 	 */
 	public static void trim(double arr [], int size) {
 		
@@ -271,6 +272,16 @@ public class MPSS {
 			int tmp = (int)(arr[i] * 10);
 			arr[i] = (double)tmp / 10;
 		}
+	}
+	
+	/**
+	 * Trims the decimal values after one place
+	 * @param Value to trim
+	 */
+	public static void trim(double value) {
+		
+		int tmp = (int)(value * 10);
+		value = (double)tmp / 10;
 	}
 	
 	public static void main(String[] args) {
@@ -337,9 +348,11 @@ public class MPSS {
 			System.out.println("Nothing results in positive sum.");
 		}
 		else if(subset < middle) {
+			trim(subset);
 			System.out.println("MPSS = " + subset);
 		}
 		else {
+			trim(middle);
 			System.out.println("MPSS = " + middle);
 		}		
 		
